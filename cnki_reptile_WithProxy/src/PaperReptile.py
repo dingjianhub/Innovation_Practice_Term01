@@ -5,13 +5,17 @@
 @time: 2018/9/13 14:54
 @desc: 
 """
+from csv import DictWriter
+
 from src.BaseReptile import BaseReptile
+import csv
 
 
 class PaperReptile(BaseReptile):
     """
     知网论文的解析
     """
+
     def __init__(self, url, model="get", params=None, **kwargs):
         BaseReptile.__init__(self, url)
         self.paperDic = dict()
@@ -33,7 +37,8 @@ class PaperReptile(BaseReptile):
         organization = self.get_elements_info('//div[@class="orgn"]//a/text()')
         abstract = self.get_elements_info('//span[@id="ChDivSummary"]//text()')
         catalogs = self.get_elements_info('//div[@class="wxBaseinfo"]/p')
-        keywords = None;classification = None
+        keywords = None;
+        classification = None
         if catalogs is not None:  # 获取关键字和分类号
             for catalog in catalogs:
                 label = catalog.xpath('./label/@id')
@@ -54,6 +59,9 @@ class PaperReptile(BaseReptile):
         self.paperDic['abstract'] = self.list_to_str(abstract)
         self.paperDic['classification'] = classification
         self.show_paper_dict()
+        # mission add
+        self.save_paper_dict_into_csv(r"..\resource\result.csv")
+        # 用r防止被转义
         return self.paperDic
 
     def show_paper_dict(self):
@@ -63,6 +71,15 @@ class PaperReptile(BaseReptile):
         """
         for key in self.paperDic:
             print(key, self.paperDic[key])
+
+    # mission add
+    def save_paper_dict_into_csv(self, path=""):
+        fieldnames = ['name', 'authors', 'organization',
+                      'keywords', 'abstract', 'classification']  # 第一行的标头
+        with open(path, 'a+', encoding='utf-8', newline='') as csvFile:
+            writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+            # writer.writeheader()    # 写标头
+            writer.writerow(self.paperDic)  # 一次写入一个字典
 
     @staticmethod
     def url_create(dbCode, filename):

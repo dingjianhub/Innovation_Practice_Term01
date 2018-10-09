@@ -8,20 +8,36 @@
 from src.BaseReptile import BaseReptile
 import re
 
-
 class PaperJournalReptile(BaseReptile):
     """
     知网期刊页面的解析
     """
+
+    # mission add
+    # global flag
+    # # mission add end
+    # @staticmethod
+    # def set_flag(value):
+    #     global flag
+    #     return flag
+    #
+    # @staticmethod
+    # def get_flag():
+    #     global flag
+    #     return flag
+
     def __init__(self, url, model="get", params=None, **kwargs):
         super(PaperJournalReptile, self).__init__(url)
         self.get_etree(model, params, **kwargs)         # 请求页面，并将其交给lxml处理，将html形成文档树，方便使用xpath获取内容
 
+    @property
     def parse_html(self):
         """
         获取并解析论文期刊页面，得到dbcode和filename中的内容
         :return: 
         """
+        # PaperJournalReptile.set_flag(True)
+
         if self.tree is None or self.requestCode != 1:
             raise RuntimeError("%s页面解析失败" % self.url)
         if self.html.find("暂无目录信息") == -1:  # 找到该目录信息
@@ -36,6 +52,9 @@ class PaperJournalReptile(BaseReptile):
             return paperUrlInfo
         else:
             print("%s: 该页面暂无目录信息" % self.url)
+            # # mission add
+            # PaperJournalReptile.set_flag(False)
+            # # mission add end
             return None
 
     @staticmethod
