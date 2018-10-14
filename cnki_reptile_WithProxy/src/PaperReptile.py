@@ -59,9 +59,11 @@ class PaperReptile(BaseReptile):
         self.paperDic['abstract'] = self.list_to_str(abstract)
         self.paperDic['classification'] = classification
         self.show_paper_dict()
-        # mission add
+        # add
+        # 以下为 dingjianhub 为实现数据持久化存储的代码
         self.save_paper_dict_into_csv(r"..\resource\result.csv")
         # 用r防止被转义
+        #end
         return self.paperDic
 
     def show_paper_dict(self):
@@ -72,7 +74,8 @@ class PaperReptile(BaseReptile):
         for key in self.paperDic:
             print(key, self.paperDic[key])
 
-    # mission add
+    # add
+    # 以下为 dingjianhub 为实现数据持久化存储的代码
     def save_paper_dict_into_csv(self, path=""):
         fieldnames = ['name', 'authors', 'organization',
                       'keywords', 'abstract', 'classification']  # 第一行的标头
@@ -80,6 +83,7 @@ class PaperReptile(BaseReptile):
             writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
             # writer.writeheader()    # 写标头
             writer.writerow(self.paperDic)  # 一次写入一个字典
+    #end
 
     @staticmethod
     def url_create(dbCode, filename):
