@@ -66,48 +66,52 @@ def get_paper_info(dbcode, filename):
 
 if __name__ == '__main__':
     # 以下为 dingjianhub 关于实现数据持久化存储的代码
-    count = 0
-    with open(r'..\resource\WantedInfo.txt', 'r') as file:
-        count = len(file.readlines())
-    i = 0
+    wanted_paper_sum = 0
+    with open(r'..\resource\WantedInfo.txt', 'r',encoding='UTF-8') as file:
+        wanted_paper_sum = len(file.readlines())
+    paper_sum = 0
+    # print(count)
 
     keys = [('name', '论文标题'), ('authors', '论文作者'), ('organization', '论文单位'), ('keywords', '论文关键字'),
             ('abstract', '论文摘要'), ('classification', '论文分类号')]
 
-    with open("../resource/result.txt", 'w') as fp:
-        while i < count:
-            # print("现在i的值为: " + str(i) + " , count的值为" + str(count))
-            for line in open(r'..\resource\WantedInfo.txt', 'r').readlines():
-                temp = line.split(',')
-                pykm = temp[0]
-                begin_year = temp[1]
-                end_year = temp[2]
-                begin_issue = temp[3]
-                end_issue = temp[4]
-                year = int(begin_year)
-                while year <= int(end_year):
-                    issue = int(begin_issue)
-                    try:
-                        while issue <= int(end_issue):
-                            for dbcode, filename in get_paper_url_info(int(year), int(issue), str(pykm), 0):
-                                print("=====================================================")
-                                result = get_paper_info(dbcode, filename)
-                                # fp.write("当前count的值为: " + str(i) + "\n")  # 调试用语句
-                                # print("当前期数: " + str(issue))
-                                fp.write("期刊名称: " + str(pykm) + "\n")
-                                fp.write("年份: " + str(year) + "\n")
-                                fp.write("期数: " + str(issue) + "\n")
-                                for key, name in keys:
-                                    fp.write(str(name) + ": " + str(result[key]))
+    # with open("../resource/result.txt", 'w') as fp:
+    while paper_sum < wanted_paper_sum:
+        with open("../resource/result.txt", 'w') as fp:
+            with open("../resource\WantedInfo.txt", 'r', encoding='UTF-8') as WantedInfoFile:
+                for line in WantedInfoFile.readlines():
+                    temp = line.split(',')
+                    pykm = temp[0]
+                    begin_year = temp[1]
+                    end_year = temp[2]
+                    begin_issue = temp[3]
+                    end_issue = temp[4]
+                    paper_name = temp[5].strip()
+                    year = int(begin_year)
+                    while year <= int(end_year):
+                        issue = int(begin_issue)
+                        try:  # 当检测到本年度期刊已经爬取完毕，会抛出异常，此时 year 增加 1，爬取下一年度期刊
+                            while issue <= int(end_issue):
+                                for dbcode, filename in get_paper_url_info(int(year), int(issue), str(pykm), 0):
+                                    print("=====================================================")
+                                    result = get_paper_info(dbcode, filename)
+                                    print("\n" + "当前期刊: " + str(paper_name) + "  当前年份: " + str(year) + "  当前期数: " + str(issue))
+                                    # print("\n" + "当前i的值为: " + str(paper_sum) + " ,当前count的值为: " + str(wanted_paper_sum))
+                                    fp.write("期刊名称: " + str(paper_name) + "\n")  # 注意：此处的 “ : ” 为英文输入法下冒号
+                                    # fp.write("期刊名称: " + str(pykm) + "\n")
+                                    fp.write("年份: " + str(year) + "\n")
+                                    fp.write("期数: " + str(issue) + "\n")
+                                    for key, name in keys:
+                                        fp.write(str(name) + ": " + str(result[key]))
+                                        fp.write("\n")
                                     fp.write("\n")
-                                fp.write("\n")
-                                print("=====================================================\n")
-                                time.sleep(0.3)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
-                            issue = issue + 1
-                    except Exception as e:
-                        # issue = issue + 1
-                        year = year + 1
-            i = i + 1
+                                    print("=====================================================\n")
+                                    time.sleep(0.5)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
+                                issue = issue + 1
+                        except Exception as e:
+                            # issue = issue + 1
+                            year = year + 1
+                    paper_sum = paper_sum + 1
 
 ''' yhj 关于数据持久化存储的代码(源码)
 
