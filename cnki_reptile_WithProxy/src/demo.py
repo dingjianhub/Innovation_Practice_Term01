@@ -53,7 +53,6 @@ def get_paper_info(dbcode, filename):
     :return: 
     """
     global proxies
-    global flag
     # proxies = get_proxy()
     try_num = 0
     url = PaperReptile.url_create(dbcode, filename)
@@ -63,7 +62,6 @@ def get_paper_info(dbcode, filename):
         except Exception as e:
             proxies = get_proxy()
             try_num = try_num + 1
-            flag = False
 
 
 if __name__ == '__main__':
@@ -78,8 +76,7 @@ if __name__ == '__main__':
 
     with open("../resource/result.txt", 'w') as fp:
         while i < count:
-            print("现在i的值为: " + str(i) + " , count的值为" + str(count))
-            # try :
+            # print("现在i的值为: " + str(i) + " , count的值为" + str(count))
             for line in open(r'..\resource\WantedInfo.txt', 'r').readlines():
                 temp = line.split(',')
                 pykm = temp[0]
@@ -94,9 +91,9 @@ if __name__ == '__main__':
                         while issue <= int(end_issue):
                             for dbcode, filename in get_paper_url_info(int(year), int(issue), str(pykm), 0):
                                 print("=====================================================")
-                                print(i)
                                 result = get_paper_info(dbcode, filename)
-                                #fp.write("当前count的值为: " + str(i) + "\n")  # 调试用语句
+                                # fp.write("当前count的值为: " + str(i) + "\n")  # 调试用语句
+                                # print("当前期数: " + str(issue))
                                 fp.write("期刊名称: " + str(pykm) + "\n")
                                 fp.write("年份: " + str(year) + "\n")
                                 fp.write("期数: " + str(issue) + "\n")
@@ -105,26 +102,25 @@ if __name__ == '__main__':
                                     fp.write("\n")
                                 fp.write("\n")
                                 print("=====================================================\n")
-                                time.sleep(1)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
-                                issue = issue + 1
-                        year = year + 1
+                                time.sleep(0.3)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
+                            issue = issue + 1
                     except Exception as e:
+                        # issue = issue + 1
                         year = year + 1
-                        issue = 1
-        i = i + 1
+            i = i + 1
 
-    ''' yhj 关于数据持久化存储的代码(源码)
+''' yhj 关于数据持久化存储的代码(源码)
 
-    keys = [('name', '论文标题'), ('authors', '论文作者'), ('organization', '论文单位'), ('keywords', '论文关键字'),
-            ('abstract', '论文摘要'), ('classification', '论文分类号')]
-    with open("../resource/result.txt", 'w') as fp:
-        for dbcode, filename in get_paper_url_info(2018, 4, "HXDY", 0):
-            print("=====================================================")
-            result = get_paper_info(dbcode, filename)
-            for key, name in keys:
-                fp.write(name + ": " + result[key])
-                fp.write("\n")
+keys = [('name', '论文标题'), ('authors', '论文作者'), ('organization', '论文单位'), ('keywords', '论文关键字'),
+        ('abstract', '论文摘要'), ('classification', '论文分类号')]
+with open("../resource/result.txt", 'w') as fp:
+    for dbcode, filename in get_paper_url_info(2018, 4, "HXDY", 0):
+        print("=====================================================")
+        result = get_paper_info(dbcode, filename)
+        for key, name in keys:
+            fp.write(name + ": " + result[key])
             fp.write("\n")
-            print("=====================================================\n")
-            time.sleep(3)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
-    '''
+        fp.write("\n")
+        print("=====================================================\n")
+        time.sleep(3)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
+'''
