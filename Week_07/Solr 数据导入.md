@@ -46,25 +46,26 @@ CMD中键入：`${SOLR_HOME}\solr-5.5.2\bin>solr create -c [new_core]`
 	```
 
 + **`data-config.xml` 的配置**
-	然后在conf目录下生成一个`data-config.xml`的文件，来配置一下我们的数据源，指定一下数据库的链接地址和表中的数据即可。
+  然后在conf目录下生成一个`data-config.xml`的文件，来配置一下我们的数据源，指定一下数据库的链接地址和表中的数据即可。
 
-	```xml
-	<dataConfig>
-	    <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/test" user="root" password="password" batchSize="-1"/>
-	    <document>
-	        <entity name="solr_test" query="SELECT paper_id,name,author,unit,keywords,year FROM paper FROM solr_test">
-	            <field column="paper_id" name="id" />
-				<field column="name" name="name" />
-				<field column="author" name="author" />
-				<field column="unit" name="unit" />
-				<field column="keywords" name="keywords" />						<field column="year" name="year" />
-	        </entity>
-	    </document>
-	</dataConfig>
-	```
+  ```xml
+  <dataConfig>
+      <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/test" user="root" password="password" batchSize="-1"/>
+      <document>
+          <entity name="solr_test" query="SELECT paper_id,name,author,unit,keywords,year FROM paper FROM solr_test">
+              <field column="paper_id" name="id" />
+  			<field column="name" name="name" />
+  			<field column="author" name="author" />
+  			<field column="unit" name="unit" />
+  			<field column="keywords" name="keywords" />	
+              <field column="year" name="year" />
+          </entity>
+      </document>
+  </dataConfig>
+  ```
 
-	+ `url="jdbc:mysql://127.0.0.1:3306/test"`是MySQL数据库的地址端口和数据库的名称
-	+ `user="root" password="password"` 填入MySQL用户名和对应密码 
+  + `url="jdbc:mysql://127.0.0.1:3306/test"`是MySQL数据库的地址端口和数据库的名称
+  + `user="root" password="password"` 填入MySQL用户名和对应密码 
 
 + #### managed-schema.xml的配置
 
