@@ -97,16 +97,17 @@ if __name__ == '__main__':
                                     result = get_paper_info(dbcode, filename)
                                     print("\n" + "当前期刊: " + str(paper_name) + "  当前年份: " + str(year) + "  当前期数: " + str(issue))
                                     # print("\n" + "当前i的值为: " + str(paper_sum) + " ,当前count的值为: " + str(wanted_paper_sum))
-                                    fp.write("期刊名称: " + str(paper_name) + "\n")  # 注意：此处的 “ : ” 为英文输入法下冒号
+                                    #fp.write("期刊名称: " + str(paper_name) + "\n")  # 注意：此处的 “ : ” 为英文输入法下冒号
                                     # fp.write("期刊名称: " + str(pykm) + "\n")
-                                    fp.write("年份: " + str(year) + "\n")
-                                    fp.write("期数: " + str(issue) + "\n")
+                                    #fp.write("年份: " + str(year) + "\n")
+                                    #fp.write("期数: " + str(issue) + "\n")
                                     for key, name in keys:
-                                        fp.write(str(name) + ": " + str(result[key]))
+                                        fp.write(str(name) + ":" + str(result[key]))
                                         fp.write("\n")
+                                    fp.write("论文年份:" + str(year) + "\n")
                                     fp.write("\n")
                                     print("=====================================================\n")
-                                    time.sleep(0.5)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
+                                    time.sleep(0.3)  # 防止频繁访问造成IP被禁，采用简单的访问一次等待一段时间
                                 issue = issue + 1
                         except Exception as e:
                             # issue = issue + 1
