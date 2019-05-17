@@ -15,14 +15,14 @@ bootstrap = Bootstrap(app)
 # def test():
 #     return render_template('test.html')
 
-@app.route('/show')  # 定义路由(Views)，可以理解为定义页面的URL
+@app.route('/show', methods=['GET', 'POST'])  # 定义路由(Views)，可以理解为定义页面的URL
 def show():
     # return "这是用Python + Flask 搞出来的。" # 渲染页面
     page = int(request.args.get('page'))
     keyword = request.args.get('keyword')
     result = tieba3.gogogoStringBr(page, keyword)
-    return render_template('show.html', page=page, keyword=keyword, result=result)
-    # return render_template('info.html', page=page, keyword=keyword, result=result)
+    # return render_template('show.html', page=page, keyword=keyword, result=result)
+    return render_template('info.html', page=page, keyword=keyword, result=result)
 
 
 if __name__ == '__main__':
