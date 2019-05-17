@@ -1,0 +1,11 @@
+<!doctype html>
+<title>贴吧搜索</title>
+<h1>贴吧搜索</h1>
+{% if page %}
+  {% if keyword %}
+	<p>{{page}}, {{keyword}}<br/><br/></p>
+	<p>{{result | safe}}</p>
+	<!--result中有<br/>标签，用safe取消自动转义-->
+  {% endif %}
+{% endif %}
+
